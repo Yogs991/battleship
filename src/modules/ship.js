@@ -1,18 +1,4 @@
-// function Ship(length){
-//     let hitCount = length;
-
-//     const isHit = ()=>{
-//         if(hitCount>0){
-//             hitCount--;
-//         }
-//     };
-
-//     const isSunk = ()=> hitCount == 0;
-//     return{length, isHit, isSunk}
-// }
-
-function Ship(name,length){
-    this.name = name;
+function Ship(length){
     this.length = length;
     let hitCount = 0;
 
@@ -27,7 +13,7 @@ function Ship(name,length){
         return false;
     }
 
-    return{name, length, hitCount, isHit, isSunk}
+    return{length, hitCount, isHit, isSunk}
 }
 
 module.exports = Ship;

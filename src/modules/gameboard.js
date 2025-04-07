@@ -27,7 +27,7 @@ const Gameboard = ()=>{
             console.log("wrong placement");
             return false;
         }else{
-            const ship = new Ship("carrier",5);
+            const ship = new Ship(5);
             ships.push(ship);
             for(let i=0; i<length; i++){
                 if( direction === "horizontal"){
@@ -82,13 +82,11 @@ const Gameboard = ()=>{
             console.log("Already been hit");
             return("Already been hit");
         }
-        // πως διαολο ελεγχω αν εχει βυθιστει γαμω????
     }
 
     const allShipsSunk = ()=>{
         return ships.every(ship=>ship.isSunk())
     };
-    // console.log(placeShip(0,1,3,"vertical"));
     return{board, ships, missedAttack ,placeShip, isValidPlacement, receiveAttack, allShipsSunk}
 }
 

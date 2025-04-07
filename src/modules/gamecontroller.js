@@ -15,9 +15,4 @@ import Ship from "./ship";
 import Gameboard from "./gameboard";
 import Player from "./player";
 
-const gameController = ()=>{
-    let player1;
-    let player2;
-    let currentPlayer;
-    
-}
+const gameController = ()=>{}
