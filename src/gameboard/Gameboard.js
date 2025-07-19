@@ -1,0 +1,81 @@
+const Ship = require("../ship/ship.js");
+
+const Gameboard = ()=>{
+    const size = 10;
+    const board = [];
+    const ships = [];
+    const missedAttack = [];
+    for(let i=0; i<size; i++){
+        board[i]= [];
+        for(let j=0; j<size; j++){
+            board[i][j] = null;
+        }
+    }
+
+    const isValidPlacement = (x, y, length, direction)=>{
+        if(direction === "horizontal"){
+            if(y + length > size){
+                return false; // Checks if ship is out of bounds
+            }
+            for(let i = 0; i < length; i++){
+                if(board[x][y + i] !== null){
+                    return false; // Checks if ship overlaps
+                }
+            }
+        }else if(direction === "vertical"){
+            if(x + length > size){
+                return false; // Checks if ship is out of bounds
+            }
+            for(let i=0; i < length; i++){
+                if(board[x + i][y] !== null){
+                    return false; // Checks if ship overlaps
+                }
+            }
+        }else{
+            return false;
+        }
+        return true;
+    }
+
+    const placeShip = (x, y, length, direction)=>{
+        if(!isValidPlacement(x, y, length, direction)){
+            return false;
+        }
+        const ship = Ship(length);
+        for(let i = 0; i < length; i++){
+            if(direction === "horizontal"){
+                board[x][y + i] = ship;
+            }else{
+                board[x + i][y] = ship;
+            }
+        }
+        ships.push(ship);
+        return true;
+    }
+
+    const receiveAttack = (x,y)=>{
+        const target = board[x][y];
+        if(target === null){
+            board[x][y] = "X";
+            missedAttack.push({x,y});
+            return "miss";
+        }else if(typeof target === "object" && board[x][y] !== "!"){
+            target.isHit();
+            board[x][y] = "!";
+            if(target.isSunk()){
+                return "sunk";
+            }
+            return "hit";
+        }else if( target === "X" || target === "!"){
+            return("Already been hit");
+        }
+    }
+
+    const allShipsSunk = ()=>{
+        return ships.every(ship=>ship.isSunk());
+    }
+
+    return {board, ships, missedAttack, placeShip, receiveAttack, allShipsSunk}
+}
+
+module.exports = Gameboard;
