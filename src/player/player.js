@@ -1,8 +1,8 @@
 const Gameboard = require("../gameboard/Gameboard");
 
-const Player = (name)=>{
+const Player = (name,isComputer = false)=>{
     const gameboard = Gameboard();
-    return{name, gameboard};
+    return{name, isComputer, gameboard};
 }
 
 module.exports = Player;

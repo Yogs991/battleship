@@ -37,12 +37,11 @@ const Gameboard = ()=>{
         return true;
     }
 
-    const placeShip = (x, y, length, direction)=>{
-        if(!isValidPlacement(x, y, length, direction)){
+    const placeShip = (ship, x, y, direction)=>{
+        if(!isValidPlacement(x, y, ship.length, direction)){
             return false;
         }
-        const ship = Ship(length);
-        for(let i = 0; i < length; i++){
+        for(let i = 0; i < ship.length; i++){
             if(direction === "horizontal"){
                 board[x][y + i] = ship;
             }else{
