@@ -31,8 +31,6 @@ const GameController = (playerName)=>{
     placeShipsRandomly(playerboard);
     placeShipsRandomly(computerBoard);
 
-
-
     const switchTurns = ()=>{
         if(allShipsDestroyed(computerBoard)){
             return "Human Won";
@@ -66,12 +64,21 @@ const GameController = (playerName)=>{
         return{
             attackResult,
             gameStatus,
-            currentPlayer: currentPlayer.name};
+            currentPlayer: currentPlayer.name
+        };
     }
+
+    const resetGame = ()=>{
+        playerboard.fill(null);
+        computerBoard.fill(null);
+        placed = [];
+        placeShipsRandomly(playerboard);
+        placeShipsRandomly(computerBoard);
+    };
     
     return{
-        humanPlayer,
-        computerPlayer,
+        getHumanPlayer: ()=> humanPlayer,
+        getComputerPlayer:()=> computerPlayer,
         getCurrentPlayer: ()=> currentPlayer,
         getPlayerBoard: ()=> playerboard,
         getComputerBoard: ()=> computerBoard,
@@ -80,6 +87,7 @@ const GameController = (playerName)=>{
         allShipsSunk,
         switchTurns,
         shipsArray,
+        resetGame,
     };
 }
 
