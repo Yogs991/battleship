@@ -12,6 +12,7 @@ const Gameboard = ()=>{
         }
     }
 
+    //function for valid ship placement
     const isValidPlacement = (x, y, length, direction)=>{
         if(direction === "horizontal"){
             if(y + length > size){
@@ -37,6 +38,7 @@ const Gameboard = ()=>{
         return true;
     }
 
+    //placing ship function
     const placeShip = (ship, x, y, direction)=>{
         if(!isValidPlacement(x, y, ship.length, direction)){
             return false;
@@ -52,6 +54,7 @@ const Gameboard = ()=>{
         return true;
     }
 
+    //function for receiving attacks
     const receiveAttack = (x,y)=>{
         const target = board[x][y];
         if(target === null){
@@ -70,6 +73,7 @@ const Gameboard = ()=>{
         }
     }
 
+    //function for sunk ship check
     const allShipsSunk = ()=>{
         return ships.every(ship=>ship.isSunk());
     }

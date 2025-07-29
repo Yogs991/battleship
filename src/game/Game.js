@@ -3,12 +3,14 @@ const Player = require("../player/player");
 
 
 const GameController = (playerName)=>{
+    //Initializing players and their boards
     let humanPlayer = Player(playerName, false);
     let computerPlayer = Player("Computer", true);
     let currentPlayer = humanPlayer;
     let playerboard = humanPlayer.gameboard;
     let computerBoard = computerPlayer.gameboard;
     
+    //Ships list
     const carrier = Ship(5);
     const battleship = Ship(4);
     const cruiser = Ship(3);
@@ -16,6 +18,7 @@ const GameController = (playerName)=>{
     const destroyer = Ship(3);
     const shipsArray = [carrier,battleship,cruiser,submarine,destroyer];
     
+    //function placing ships randomly on boards
     const placeShipsRandomly = (gameboard)=>{
         shipsArray.forEach(ship=>{
             let placed = false;
@@ -31,6 +34,7 @@ const GameController = (playerName)=>{
     placeShipsRandomly(playerboard);
     placeShipsRandomly(computerBoard);
 
+    //function changing turns and deciding the winner if ships are sunk
     const switchTurns = ()=>{
         if(allShipsDestroyed(computerBoard)){
             return "Human Won";
@@ -38,14 +42,16 @@ const GameController = (playerName)=>{
             return "Computer Won";
         }else{
             currentPlayer = (currentPlayer === humanPlayer) ? computerPlayer : humanPlayer;
-            return "Next Turn"
+            return "Next Turn";
         }
     }
 
+    //function that checks if ships are sunk in current board
     const allShipsDestroyed = (gameboard)=>{
         return gameboard.allShipsSunk();
     }
     
+    // function to attack opponent and change current player
     const attackOpponent = (x,y)=>{
         let attackResult = null;
         let gameStatus = "continue";
@@ -68,6 +74,7 @@ const GameController = (playerName)=>{
         };
     }
 
+    //function that resets the game 
     const resetGame = ()=>{
         playerboard.fill(null);
         computerBoard.fill(null);
@@ -84,7 +91,7 @@ const GameController = (playerName)=>{
         getComputerBoard: ()=> computerBoard,
         placeShipsRandomly,
         attackOpponent,
-        allShipsSunk,
+        allShipsDestroyed,
         switchTurns,
         shipsArray,
         resetGame,
