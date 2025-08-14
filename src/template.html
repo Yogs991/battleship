@@ -8,16 +8,22 @@
 <body>
     <header>
         <h1>Battleship</h1>
-        <button id="start-button">Start Game</button>
+        <div id="button-list">
+            <button id="start-button">Start Game</button>
+            <button id="randomize-button">Randomize</button>
+            <button id="reset-button">Reset</button>
+        </div>
     </header>
     <div id="boards">
         <div>
             <h2>Player</h2>
             <div id="player-board" class="board"></div>
+            <div class="ship-container"></div>
         </div>
         <div>
             <h2>Computer</h2>
             <div id="computer-board" class="board"></div>
+            <div class="ship-container"></div>
         </div>
     </div>
 </body>

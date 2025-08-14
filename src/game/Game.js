@@ -19,14 +19,14 @@ const GameController = (playerName)=>{
     const shipsArray = [carrier,battleship,cruiser,submarine,destroyer];
     
     //function placing ships randomly on boards
-    const placeShipsRandomly = (gameboard)=>{
+    const placeShipsRandomly = (board)=>{
         shipsArray.forEach(ship=>{
             let placed = false;
             while(!placed){
                 const x = Math.floor(Math.random()*10);
                 const y = Math.floor(Math.random()*10);
                 const direction = Math.random() < 0.5 ? "horizontal" : "vertical";
-                placed = gameboard.placeShip(ship, x, y, direction);
+                placed = board.placeShip(ship, x, y, direction);
             }
         });
     }
@@ -76,9 +76,14 @@ const GameController = (playerName)=>{
 
     //function that resets the game 
     const resetGame = ()=>{
-        playerboard.fill(null);
-        computerBoard.fill(null);
-        placed = [];
+        for(let x = 0; x < 10; x++){
+            for(let y = 0; y < 10; y++){
+                playerboard.board[x][y] = null;
+                computerBoard.board[x][y] = null;
+            }
+        }
+        playerboard.ships.length = 0;
+        computerBoard.ships.length = 0;
         placeShipsRandomly(playerboard);
         placeShipsRandomly(computerBoard);
     };
