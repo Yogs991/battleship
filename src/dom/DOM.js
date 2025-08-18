@@ -1,18 +1,17 @@
 //~~ToDo Tasks~~
-    //3) ενα div που εχει τα  5 πλοια του καθε παιχτη κατω απο τα board τους
-    //6) οταν βυθισεις ενα πλοιο τελειως να σβηνει απο το div που τα περιεχει ολα
-    //7) οταν κανεις click 1 cell αναλογα αν ειναι hit γινεται κοκκινο και αν ειναι miss σκουρο μπλε
-    //8) μηνυμα σε h2 tag πανω απο τα boards που λεει "Player turn" και "Computer turn"
-    //9) αν βαρεσεις to ηδη χτυπημενο cell βγαζει μηνυμα στο ιδιο h2 "Already hit this cell"
-    //10) Ελεγχος οταν ολα τα πλοια βυθιστουν "Player Won/ Computer Won" και ενα button για reset σε modal?
-    
-    //~~ToDo Tasks Done~~
+//6) οταν βυθισεις ενα πλοιο τελειως να σβηνει απο το div που τα περιεχει ολα
+//7) οταν κανεις click 1 cell αναλογα αν ειναι hit γινεται κοκκινο και αν ειναι miss σκουρο μπλε
+//8) μηνυμα σε h2 tag πανω απο τα boards που λεει "Player turn" και "Computer turn"
+//9) αν βαρεσεις to ηδη χτυπημενο cell βγαζει μηνυμα στο ιδιο h2 "Already hit this cell"
+//10) Ελεγχος οταν ολα τα πλοια βυθιστουν "Player Won/ Computer Won" και ενα button για reset σε modal?
+
+//~~ToDo Tasks Done~~
     //1) render τα boards - DONE
     //2) reset button για να κανεις reset το UI - DONE
+    //3) ενα div που εχει τα  5 πλοια του καθε παιχτη κατω απο τα board τους - DONE
     //4) randomize button για τα πλοια - DONE
     //5) τα πλοια του αντιπαλου πρεπει να ειναι hidden - DONE
-
-const { container } = require("webpack");
+    
 const gameController = require("../game/Game");
 const game = gameController("player");
 
@@ -28,8 +27,6 @@ const DOMController = ()=>{
     const initGame =()=>{
         renderBoard(playerBoardElement);
         renderBoard(computerBoardElement);
-        // renderShips(playerBoardElement, game.getPlayerBoard());
-        // renderShips(computerBoardElement, game.getComputerBoard());
         renderShipList(playerShips, game.shipsArray);
         renderShipList(computerShips, game.shipsArray);
     }
@@ -72,9 +69,9 @@ const DOMController = ()=>{
     //     });
     // }
 
-    const renderShipList = (container, shipsArray) => {
+    const renderShipList = (shipList, shipsArray) => {
         if (!container) return;
-        container.innerHTML = "";
+        shipList.innerHTML = "";
 
         shipsArray.forEach((ship, i) => {
             const shipWrapper = document.createElement("div");
@@ -88,7 +85,7 @@ const DOMController = ()=>{
             label.textContent = `${ship.name}`;
             label.classList.add("ship-label");
             shipWrapper.appendChild(label);
-            container.appendChild(shipWrapper);
+            shipList.appendChild(shipWrapper);
         });
     };
 
