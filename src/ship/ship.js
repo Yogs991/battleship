@@ -1,4 +1,4 @@
-function Ship(length){
+function Ship(length, name){
     let hitCount = 0;
     
     const isHit = ()=>{
@@ -9,7 +9,7 @@ function Ship(length){
         return hitCount >= length;
     }
 
-    return {length, isHit, isSunk}
+    return {name, length, isHit, isSunk}
 }
 
 module.exports = Ship;

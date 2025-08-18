@@ -76,3 +76,30 @@ button:hover{
 .ship{
     background-color: green;
 }
+
+.ship-container{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ship-item{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ship-box{
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.ship-label{
+    margin-left: 8px;
+    font-size: 12px;
+    color: black;    
+}

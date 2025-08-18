@@ -12,6 +12,7 @@
     //4) randomize button για τα πλοια - DONE
     //5) τα πλοια του αντιπαλου πρεπει να ειναι hidden - DONE
 
+const { container } = require("webpack");
 const gameController = require("../game/Game");
 const game = gameController("player");
 
@@ -21,13 +22,16 @@ const DOMController = ()=>{
     const startButton = document.getElementById("start-button");
     const randomizeButton = document.getElementById("randomize-button");
     const resetButton = document.getElementById("reset-button");
-    const shipContainer = document.getElementById("ship-container");
+    const playerShips = document.getElementById("player-ships");
+    const computerShips = document.getElementById("computer-ships");
     
     const initGame =()=>{
         renderBoard(playerBoardElement);
         renderBoard(computerBoardElement);
         // renderShips(playerBoardElement, game.getPlayerBoard());
         // renderShips(computerBoardElement, game.getComputerBoard());
+        renderShipList(playerShips, game.shipsArray);
+        renderShipList(computerShips, game.shipsArray);
     }
     
     const renderBoard = (boardElement)=>{
@@ -53,6 +57,40 @@ const DOMController = ()=>{
             }
         }
     }
+
+    // const renderShipContainer = (container, shipsArray)=>{
+    //     container.innerHTML = "";
+    //     const shipWrapper = document.createElement("div");
+    //     shipWrapper.classList.add("ship-item");
+    //     shipsArray.forEach(ship => {
+    //         for(let i = 0; i < ship.length; i++){
+    //             const box = document.createElement("div");
+    //             box.classList.add("ship-box");
+    //             shipWrapper.appendChild(box);
+    //         }
+    //         container.appendChild(shipWrapper);
+    //     });
+    // }
+
+    const renderShipList = (container, shipsArray) => {
+        if (!container) return;
+        container.innerHTML = "";
+
+        shipsArray.forEach((ship, i) => {
+            const shipWrapper = document.createElement("div");
+            shipWrapper.classList.add("ship-item");
+            for (let j = 0; j < ship.length; j++) {
+                const box = document.createElement("div");
+                box.classList.add("ship-box");
+                shipWrapper.appendChild(box);
+            }
+            const label = document.createElement("span");
+            label.textContent = `${ship.name}`;
+            label.classList.add("ship-label");
+            shipWrapper.appendChild(label);
+            container.appendChild(shipWrapper);
+        });
+    };
 
 
     startButton.addEventListener("click",()=>{

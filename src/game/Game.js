@@ -11,11 +11,11 @@ const GameController = (playerName)=>{
     let computerBoard = computerPlayer.gameboard;
     
     //Ships list
-    const carrier = Ship(5);
-    const battleship = Ship(4);
-    const cruiser = Ship(3);
-    const submarine = Ship(3);
-    const destroyer = Ship(3);
+    const carrier = Ship(5,"Carrier");
+    const battleship = Ship(4,"Battleship");
+    const cruiser = Ship(3,"Cruiser");
+    const submarine = Ship(3,"Submarine");
+    const destroyer = Ship(2,"Destroyer");
     const shipsArray = [carrier,battleship,cruiser,submarine,destroyer];
     
     //function placing ships randomly on boards
