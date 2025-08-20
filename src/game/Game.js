@@ -9,15 +9,20 @@ const GameController = (playerName)=>{
     let currentPlayer = humanPlayer;
     let playerboard = humanPlayer.gameboard;
     let computerBoard = computerPlayer.gameboard;
-    
+
     //Ships list
     const carrier = Ship(5,"Carrier");
+    carrier.id = "carrier";
     const battleship = Ship(4,"Battleship");
+    battleship.id = "battleship";
     const cruiser = Ship(3,"Cruiser");
+    cruiser.id = "cruiser";
     const submarine = Ship(3,"Submarine");
+    submarine.id = "submarine";
     const destroyer = Ship(2,"Destroyer");
+    destroyer.id = "destroyer";
     const shipsArray = [carrier,battleship,cruiser,submarine,destroyer];
-    
+
     //function placing ships randomly on boards
     const placeShipsRandomly = (board)=>{
         shipsArray.forEach(ship=>{
@@ -94,19 +99,13 @@ const GameController = (playerName)=>{
         getCurrentPlayer: ()=> currentPlayer,
         getPlayerBoard: ()=> playerboard,
         getComputerBoard: ()=> computerBoard,
+        shipsArray,
         placeShipsRandomly,
         attackOpponent,
         allShipsDestroyed,
         switchTurns,
-        shipsArray,
         resetGame,
     };
 }
 
 module.exports = GameController;
-//functions for:
-// 1) random ship placement for computer player -- DONE
-// 2) change turns --DONE
-// 3) hit/ miss shots correctly
-// 4) check for winner -- DONE
-// 5) game over logic -- DONE

@@ -73,6 +73,12 @@ button:hover{
     height: 50px;
 }
 
+.cell:hover{
+    cursor: pointer;
+    transition: all ease-in-out 0.2s;
+    background-color: #0071e2;
+}
+
 .ship{
     background-color: green;
 }
@@ -102,4 +108,12 @@ button:hover{
     margin-left: 8px;
     font-size: 12px;
     color: black;    
+}
+
+.cell.hit{
+    background-color: red;
+}
+
+.cell.miss{
+    background-color: darkblue;
 }

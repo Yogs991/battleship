@@ -56,6 +56,9 @@ const Gameboard = ()=>{
 
     //function for receiving attacks
     const receiveAttack = (x,y)=>{
+        if(x < 0 || x >= size || y < 0 || y >= size){
+            return "Invalid coordinates";
+        }
         const target = board[x][y];
         if(target === null){
             board[x][y] = "X";
