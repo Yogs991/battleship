@@ -12,6 +12,7 @@
     //4) randomize button για τα πλοια - DONE
     //5) τα πλοια του αντιπαλου πρεπει να ειναι hidden - DONE
 
+const cli = require("cli");
 const gameController = require("../game/Game");
 const game = gameController("player");
 
@@ -24,7 +25,7 @@ const DOMController = ()=>{
     const playerShips = document.getElementById("player-ships");
     const computerShips = document.getElementById("computer-ships");
     const showMessage = document.getElementById("show-message");
-    const currentPlayer = game.currentPlayer;
+    // const currentPlayer = game.currentPlayer;
     
     const initGame =()=>{
         renderBoard(playerBoardElement);
@@ -32,17 +33,16 @@ const DOMController = ()=>{
         renderShips(playerBoardElement, game.getPlayerBoard(), false);
         renderShipList(playerShips, game.shipsArray);
         renderShipList(computerShips, game.shipsArray);
-        handleCellClick();
     }
     
     const renderBoard = (boardElement)=>{
         boardElement.innerHTML = "";
-        for (let y = 0; y < 10; y++){
-            for (let x = 0; x < 10; x++){
+        for (let x = 0; x < 10; x++){
+            for (let y = 0; y < 10; y++){
                 const cell = document.createElement("div");
                 cell.classList.add("cell");
-                cell.dataset.y = y;
                 cell.dataset.x = x;
+                cell.dataset.y = y;
                 boardElement.appendChild(cell);
             }
         }
@@ -79,38 +79,44 @@ const DOMController = ()=>{
         });
     };
 
-    const handleCellClick = ()=>{
-        const computerBoardCells = computerBoardElement.querySelectorAll(".cell");
-        computerBoardCells.addEventListener("click",()=>{
-            const x = parseInt(cell.dataset.x);
-            const y = parseInt(cell.dataset.y);
-            const cellClicked = game.attackOpponent(x,y);
-            updateCellUI(cell, cellClicked);
-            if(game.attackOpponent.currentPlayer === "Computer"){
-                handleComputerClick();
-            }
-        });
-    }
+    const handleCellClick = (event)=>{
+        const cell = event.target;
+        const x = (cell.dataset.x, 10);
+        const y = (cell.dataset.y, 10);
+        const clickedResult = game.attackOpponent(x,y);
+        updateCellUI(cell, clickedResult.attackResult);
+        updateMessage(clickedResult.attackResult);
+        if(clickedResult.gameStatus === "Human Won" || clickedResult.gameStatus === "Computer Won"){
+            endGame(clickedResult.gameStatus);
+            return;
+        }
+        if(clickedResult.currentPlayer === "Computer"){
+            updateMessage("Computer Turn");
+            handleComputerTurn();
+        }else{
+            updateMessage("Player Turn");
+        }
+    };
 
-    const updateCellUI = (cellElement, attackResult)=>{
-        cellElement.addEventListener("click",()=>{
-            if(attackResult === "miss"){
-                cellElement.classList.add("miss");
-                showMessage.textContent = "Missed";
-            }else if(attackResult === "hit"){
-                cellElement.classList.add("hit");
-                showMessage.textContent = "Hit the ship";
-            }else if(attackResult === "Already been hit"){
-                showMessage.textContent = "Already been hit";
-                return;
-            }else if (attackResult === "hit"){
-                //Add sunk feature
-            };
-        });
-    }
+    const updateCellUI = (cellElement, result)=>{
+        if(result === "miss"){
+            cellElement.classList.add("miss");
+        }else if(result === "hit"){
+            cell.classList.add("hit");
+        }else if(result === "Already been hit"){
+            updateMessage("Already been hit");
+        }else if (result === "sunk"){
+            //remove sunk ship
+        }
+    };
 
-    const handleComputerClick = ()=>{}
+    const updateMessage = (text)=>{
+        showMessage.textContent = text;
+    };
 
+    const handleComputerTurn = () =>{}
+
+    const endGame = ()=>{}
 
     startButton.addEventListener("click",()=>{
         initGame();
