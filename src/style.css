@@ -111,9 +111,9 @@ button:hover{
 }
 
 .cell.hit{
-    background-color: red;
+    background-color: red !important;
 }
 
 .cell.miss{
-    background-color: darkblue;
+    background-color: darkblue !important;
 }

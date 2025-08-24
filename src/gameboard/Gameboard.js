@@ -68,7 +68,7 @@ const Gameboard = ()=>{
             target.isHit();
             board[x][y] = "!";
             if(target.isSunk()){
-                return "sunk";
+                return {result:"sunk", shipId: target.id};
             }
             return "hit";
         }else if( target === "X" || target === "!"){

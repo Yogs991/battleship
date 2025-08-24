@@ -60,22 +60,40 @@ const GameController = (playerName)=>{
     const attackOpponent = (x,y)=>{
         let attackResult = null;
         let gameStatus = "continue";
+        let attackCoords = {};
         if( currentPlayer === humanPlayer){
             attackResult = computerBoard.receiveAttack(x,y);
+            attackCoords = {x,y};
         }else{
             let validAttack = false;
             while(!validAttack){
-                const x = Math.floor(Math.random()*10);
-                const y = Math.floor(Math.random()*10);
-                attackResult = playerboard.receiveAttack(x,y);
-                validAttack = attackResult;
+                const randomX = Math.floor(Math.random()*10);
+                const randomY = Math.floor(Math.random()*10);
+                computerAttack = playerboard.receiveAttack(randomX,randomY);
+                if(computerAttack !== "Already been hit"){
+                    attackResult = computerAttack;
+                    validAttack = true;
+                    attackCoords = {x: randomX, y: randomY};
+                }
             }
         }
         gameStatus = switchTurns();
+        if(typeof attackResult === "object"){
+            return{
+                attackResult: attackResult.result,
+                shipId: attackResult.shipId,
+                x: attackCoords.x,
+                y: attackCoords.y,
+                gameStatus,
+                currentPlayer: currentPlayer.name,
+            }
+        }
         return{
             attackResult,
             gameStatus,
-            currentPlayer: currentPlayer.name
+            currentPlayer: currentPlayer.name,
+            x: attackCoords.x,
+            y: attackCoords.y,
         };
     }
 

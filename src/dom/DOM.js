@@ -1,18 +1,9 @@
 //~~ToDo Tasks~~
-//6) οταν κανεις click 1 cell αναλογα αν ειναι hit γινεται κοκκινο και αν ειναι miss σκουρο μπλε
-//7) αν βαρεσεις to ηδη χτυπημενο cell βγαζει μηνυμα στο ιδιο h2 "Already hit this cell"
-//8) οταν βυθισεις ενα πλοιο τελειως να σβηνει απο το div που τα περιεχει ολα
-//9) μηνυμα σε h2 tag πανω απο τα boards που λεει "Player turn" και "Computer turn"
 //10) Ελεγχος οταν ολα τα πλοια βυθιστουν "Player Won/ Computer Won" και ενα button για reset σε modal?
+// Καπου το computer board εχει hidden ολα τα cells γιαυτο δεν εμφανιζει τα hits και miss
+// Αν οχι το απο πανω τοτε δεν περναει τα hit και miss classes 
 
-//~~ToDo Tasks Done~~
-    //1) render τα boards - DONE
-    //2) reset button για να κανεις reset το UI - DONE
-    //3) ενα div που εχει τα  5 πλοια του καθε παιχτη κατω απο τα board τους - DONE
-    //4) randomize button για τα πλοια - DONE
-    //5) τα πλοια του αντιπαλου πρεπει να ειναι hidden - DONE
 
-const cli = require("cli");
 const gameController = require("../game/Game");
 const game = gameController("player");
 
@@ -33,6 +24,7 @@ const DOMController = ()=>{
         renderShips(playerBoardElement, game.getPlayerBoard(), false);
         renderShipList(playerShips, game.shipsArray);
         renderShipList(computerShips, game.shipsArray);
+        // enableBoardListener();
     }
     
     const renderBoard = (boardElement)=>{
@@ -52,8 +44,12 @@ const DOMController = ()=>{
         for (let x = 0; x < 10; x++){
             for (let y = 0; y < 10; y++){
                 const cellElement = boardElement.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+                const ship = gameboard.board[x][y];
                 if(!isComputer && gameboard.board[x][y] !== null){
                     cellElement.classList.add("ship");
+                }
+                if(ship && ship.id){
+                    cellElement.dataset.shipId = ship.id;
                 }
             }
         }
@@ -81,10 +77,10 @@ const DOMController = ()=>{
 
     const handleCellClick = (event)=>{
         const cell = event.target;
-        const x = (cell.dataset.x, 10);
-        const y = (cell.dataset.y, 10);
+        const x = Number(cell.dataset.x);
+        const y = Number(cell.dataset.y);
         const clickedResult = game.attackOpponent(x,y);
-        updateCellUI(cell, clickedResult.attackResult);
+        updateCellUI(cell, clickedResult.attackResult, clickedResult.shipId);
         updateMessage(clickedResult.attackResult);
         if(clickedResult.gameStatus === "Human Won" || clickedResult.gameStatus === "Computer Won"){
             endGame(clickedResult.gameStatus);
@@ -92,21 +88,25 @@ const DOMController = ()=>{
         }
         if(clickedResult.currentPlayer === "Computer"){
             updateMessage("Computer Turn");
-            handleComputerTurn();
+            setTimeout(() => {
+                handleComputerTurn();
+            }, 2000);
         }else{
             updateMessage("Player Turn");
         }
     };
 
-    const updateCellUI = (cellElement, result)=>{
+    const updateCellUI = (cellElement, result, shipId = null)=>{
         if(result === "miss"){
             cellElement.classList.add("miss");
+            updateMessage("Missed");
         }else if(result === "hit"){
-            cell.classList.add("hit");
+            cellElement.classList.add("hit");
+            updateMessage("Hit!");
         }else if(result === "Already been hit"){
             updateMessage("Already been hit");
-        }else if (result === "sunk"){
-            //remove sunk ship
+        }else if (result === "sunk" && shipId){
+            removeShipFromList(shipId);
         }
     };
 
@@ -114,29 +114,73 @@ const DOMController = ()=>{
         showMessage.textContent = text;
     };
 
-    const handleComputerTurn = () =>{}
+    const handleComputerTurn = () =>{
+        const result = game.attackOpponent();
+        const playerCell = playerBoardElement.querySelector(`.cell[data-x="${result.x}"][data-y="${result.y}"]`);
+        updateCellUI(playerCell, result.attackResult, result.shipId);
+        updateMessage(result.attackResult);
+        if(result.gameStatus === "Human Won" || result.gameStatus === "Computer Won"){
+            endGame(result.gameStatus);
+            return;
+        }
 
-    const endGame = ()=>{}
+        updateMessage("Player Turn");
+    }
+
+    const removeShipFromList = (shipId)=>{
+        const playerShipElement = playerShips.querySelector(`[data-ship-id=${shipId}]`);
+        const computerShipElement = computerShips.querySelector(`[data-ship-id=${shipId}]`);
+        if(playerShipElement){
+            playerShipElement.remove();
+        }else{
+            computerShipElement.remove();
+        }
+    }
+
+    const endGame = (winner)=>{
+       if(winner === "Human Won"){
+        updateMessage("Human Won");
+       }else if(winner === "Computer Won"){
+        updateMessage("Computer Won");
+       }
+
+       const cells = document.querySelectorAll(".cell");
+       cells.forEach(cell=>{
+        cell.removeEventListener("click", handleCellClick);
+       });
+    }
 
     startButton.addEventListener("click",()=>{
         initGame();
+        enableBoardListener();
         startButton.style.display = "none";
+        updateMessage("Player Turn");
     });
     
     randomizeButton.addEventListener("click",()=>{
         game.resetGame();
         renderBoard(playerBoardElement);
         renderBoard(computerBoardElement);
-        
         renderShips(playerBoardElement, game.getPlayerBoard(),false);
         renderShips(computerBoardElement, game.getComputerBoard(),true);
+        enableBoardListener();
     });
     
     resetButton.addEventListener("click",()=>{
         game.resetGame();
         renderBoard(playerBoardElement);
         renderBoard(computerBoardElement);
+        renderShipList(playerShips, game.shipsArray);
+        renderShipList(computerShips, game.shipsArray);
+        showMessage.textContent = "";
     });
+
+    const enableBoardListener = ()=>{
+        const cells = computerBoardElement.querySelectorAll(".cell");
+        cells.forEach(cell=>{
+            cell.addEventListener("click",handleCellClick);
+        });
+    }
     
     return{initGame};
 }
