@@ -16,8 +16,9 @@ const DOMController = ()=>{
     const playerShips = document.getElementById("player-ships");
     const computerShips = document.getElementById("computer-ships");
     const showMessage = document.getElementById("show-message");
-    // const currentPlayer = game.currentPlayer;
     
+
+    //Initializes the game
     const initGame =()=>{
         renderBoard(playerBoardElement);
         renderBoard(computerBoardElement);
@@ -27,6 +28,7 @@ const DOMController = ()=>{
         // enableBoardListener();
     }
     
+    //Creates the boards used by both players
     const renderBoard = (boardElement)=>{
         boardElement.innerHTML = "";
         for (let x = 0; x < 10; x++){
@@ -39,7 +41,8 @@ const DOMController = ()=>{
             }
         }
     }
-   
+
+   //Creates the ships inside the boards
     const renderShips = (boardElement, gameboard, isComputer = false)=>{
         for (let x = 0; x < 10; x++){
             for (let y = 0; y < 10; y++){
@@ -55,6 +58,7 @@ const DOMController = ()=>{
         }
     }
 
+    //Creates the box under the boards that contains the ships
     const renderShipList = (shipList, shipsArray) => {
         if (!shipList) return;
         shipList.innerHTML = "";
@@ -75,6 +79,7 @@ const DOMController = ()=>{
         });
     };
 
+    //Function that handles the player clicks in opponent's board
     const handleCellClick = (event)=>{
         const cell = event.target;
         const x = Number(cell.dataset.x);
@@ -96,6 +101,7 @@ const DOMController = ()=>{
         }
     };
 
+    //Function that helps change the style of clicked cells
     const updateCellUI = (cellElement, result, shipId = null)=>{
         if(result === "miss"){
             cellElement.classList.add("miss");
@@ -110,10 +116,12 @@ const DOMController = ()=>{
         }
     };
 
+    //Function that changes the h2 in html
     const updateMessage = (text)=>{
         showMessage.textContent = text;
     };
 
+    //Function that handles the computer AI action
     const handleComputerTurn = () =>{
         const result = game.attackOpponent();
         const playerCell = playerBoardElement.querySelector(`.cell[data-x="${result.x}"][data-y="${result.y}"]`);
@@ -127,6 +135,7 @@ const DOMController = ()=>{
         updateMessage("Player Turn");
     }
 
+    //Function that removes ship when it gets sunk from the div .ship-container which contains all ships under the boards
     const removeShipFromList = (shipId)=>{
         const playerShipElement = playerShips.querySelector(`[data-ship-id=${shipId}]`);
         const computerShipElement = computerShips.querySelector(`[data-ship-id=${shipId}]`);
@@ -137,6 +146,7 @@ const DOMController = ()=>{
         }
     }
 
+    //Function that checks when game ends when conditions are met
     const endGame = (winner)=>{
        if(winner === "Human Won"){
         updateMessage("Human Won");
@@ -150,6 +160,7 @@ const DOMController = ()=>{
        });
     }
 
+    //Event listener starting the game
     startButton.addEventListener("click",()=>{
         initGame();
         enableBoardListener();
@@ -157,6 +168,7 @@ const DOMController = ()=>{
         updateMessage("Player Turn");
     });
     
+    //Event listener for random ship placement with random button
     randomizeButton.addEventListener("click",()=>{
         game.resetGame();
         renderBoard(playerBoardElement);
@@ -166,6 +178,7 @@ const DOMController = ()=>{
         enableBoardListener();
     });
     
+    //Event listener resetting the game with reset button
     resetButton.addEventListener("click",()=>{
         game.resetGame();
         renderBoard(playerBoardElement);
@@ -175,6 +188,7 @@ const DOMController = ()=>{
         showMessage.textContent = "";
     });
 
+    //Event listener that enables the handleCellClick function after the game starts
     const enableBoardListener = ()=>{
         const cells = computerBoardElement.querySelectorAll(".cell");
         cells.forEach(cell=>{
